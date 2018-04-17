@@ -110,17 +110,17 @@ public class Fragment1 extends Fragment {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-//                    Forms form =new Forms();
-//                    String name = ((EditText)getView().findViewById(R.id.editText)).getText().toString();
-//                    String date = ((EditText)getView().findViewById(R.id.editText3)).getText().toString();
-//                    String cate = ((Spinner)getView().findViewById(R.id.spinner)).getSelectedItem().toString();
-//                    String comm = ((EditText)getView().findViewById(R.id.editText2)).getText().toString();
-//                    form.setFormName(name);
-//                    form.setFormDate(date);
-//                    form.setFormCategory(cate);
-//                    form.setFormComment(comm);
-//
-//                    formDatabase.daoAccess().insertOnlySingleForm(form);
+                    Forms form =new Forms();
+                    String name = ((EditText)getView().findViewById(R.id.editText)).getText().toString();
+                    String date = ((EditText)getView().findViewById(R.id.editText3)).getText().toString();
+                    String cate = ((Spinner)getView().findViewById(R.id.spinner)).getSelectedItem().toString();
+                    String comm = ((EditText)getView().findViewById(R.id.editText2)).getText().toString();
+                    form.setFormName(name);
+                    form.setFormDate(date);
+                    form.setFormCategory(cate);
+                    form.setFormComment(comm);
+
+                    formDatabase.daoAccess().insertOnlySingleForm(form);
                 }
             }) .start();
             Toast.makeText(getActivity(),"Formulario creado exitosamente!!",Toast.LENGTH_LONG).show();

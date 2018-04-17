@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -79,12 +80,20 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                            JSONArray array = response.getJSONArray("0");
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject entry = array.getJSONObject(i);
-                                Forms f = new Forms(entry);
-                                formDatabase.daoAccess().insertOnlySingleForm(f);
-                            }
+                    JSONArray array = response.getJSONArray("0");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject entry = array.getJSONObject(i);
+                        Forms f = new Forms();
+                        String name = entry.getString("name");
+                        String date = entry.getString("created_at");
+                        String cate = entry.getString("name");
+                        String comm = entry.getString("name");
+                        f.setFormName(name);
+                        f.setFormDate(date);
+                        f.setFormCategory(cate);
+                        f.setFormComment(comm);
+                        formDatabase.daoAccess().insertOnlySingleForm(f);
+                    }
                 } catch (Exception e) {
 
                 }

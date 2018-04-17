@@ -20,17 +20,7 @@ public class Forms {
     private String formComment;
     private String formCategory;
 
-    public Forms(JSONObject jsonObject) {
-        try {
-            this.formName = jsonObject.getString("name");
-            this.formDate = jsonObject.getString("created_at");
-            this.formComment = jsonObject.getString("name");
-            this.formCategory = jsonObject.getString("name");
-        } catch (Exception e) {
-
-        }
-
-
+    public Forms() {
     }
 
     public int getFormId() { return formId; }
