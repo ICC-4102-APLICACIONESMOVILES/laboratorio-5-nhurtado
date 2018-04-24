@@ -21,6 +21,8 @@ public interface DaoAccess {
     void insertOnlySingleQuestion (Questions Questions);
     @Insert
     void insertMultipleForms (List<Forms> FormList);
+    @Insert
+    void insertMultipleQuestions (List<Questions> QuestionList);
     @Query("SELECT * FROM Forms WHERE formId = :formId")
     Forms fetchOneFormsbyFormId (int formId);
     @Query("SELECT * FROM Forms")

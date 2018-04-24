@@ -84,7 +84,9 @@ public class Login extends AppCompatActivity {
                 try {
                     JSONArray array = response.getJSONArray("0");
                     //final List<Forms> Fs = new ArrayList<Forms>();
+                    final List<Questions> Qs = new ArrayList<Questions>();
                     for (int i = 0; i < array.length(); i++) {
+                        Qs.clear();
                         JSONObject entry = array.getJSONObject(i);
                         final Forms f = new Forms();
                         String name = entry.getString("name");
@@ -97,12 +99,6 @@ public class Login extends AppCompatActivity {
                         f.setFormComment(comm);
                         int id = f.getFormId();
                         JSONArray array2 = entry.getJSONArray("fieldsets");
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                formDatabase.daoAccess().insertOnlySingleForm(f);
-                            }
-                        }) .start();
                         for (int j = 0; j < array2.length(); j++) {
                             JSONObject entry2 = array2.getJSONObject(j);
                             final Questions q = new Questions();
@@ -111,13 +107,17 @@ public class Login extends AppCompatActivity {
                             q.setFormId(id);
                             q.setQuestionText(qtext);
                             q.setQuestionType(qtype);
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    formDatabase.daoAccess().insertOnlySingleQuestion(q);
-                                }
-                            }) .start();
+                            Qs.add(q);
                         }
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                formDatabase.daoAccess().insertOnlySingleForm(f);
+                                if(Qs!=null) {
+                                    formDatabase.daoAccess().insertMultipleQuestions(Qs);
+                                }
+                            }
+                        }) .start();
                     }
 
 
