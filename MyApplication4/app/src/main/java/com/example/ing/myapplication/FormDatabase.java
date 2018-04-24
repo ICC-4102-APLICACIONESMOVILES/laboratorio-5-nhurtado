@@ -8,7 +8,7 @@ import android.arch.persistence.room.RoomDatabase;
  */
 
 
-@Database(entities = {Forms.class}, version = 1, exportSchema = false)
+@Database(entities = {Forms.class,Questions.class}, version = 1, exportSchema = false)
 public abstract class FormDatabase extends RoomDatabase {
     public abstract DaoAccess daoAccess() ;
 }

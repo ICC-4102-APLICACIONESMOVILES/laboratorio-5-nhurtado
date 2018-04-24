@@ -18,11 +18,17 @@ public interface DaoAccess {
     @Insert
     void insertOnlySingleForm (Forms forms);
     @Insert
-    void insertMultipleForms (List<Forms> moviesList);
+    void insertOnlySingleQuestion (Questions Questions);
+    @Insert
+    void insertMultipleForms (List<Forms> FormList);
     @Query("SELECT * FROM Forms WHERE formId = :formId")
     Forms fetchOneFormsbyFormId (int formId);
     @Query("SELECT * FROM Forms")
     List<Forms> fetchAllForms();
+    @Query("DELETE FROM Forms")
+    void nukeTableF();
+    @Query("DELETE FROM Questions")
+    void nukeTableQ();
     @Update
     void updateMovie (Forms forms);
     @Delete

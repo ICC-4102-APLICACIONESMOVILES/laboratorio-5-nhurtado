@@ -17,6 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Login extends AppCompatActivity {
 
     private EditText e;
@@ -36,7 +39,6 @@ public class Login extends AppCompatActivity {
 
         formDatabase = Room.databaseBuilder(getApplicationContext(),
                 FormDatabase.class, DATABASE_NAME)
-                .allowMainThreadQueries()
                 .build();
 
         networkManager = NetworkManager.getInstance(this);
@@ -81,9 +83,10 @@ public class Login extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray("0");
+                    //final List<Forms> Fs = new ArrayList<Forms>();
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject entry = array.getJSONObject(i);
-                        Forms f = new Forms();
+                        final Forms f = new Forms();
                         String name = entry.getString("name");
                         String date = entry.getString("created_at");
                         String cate = entry.getString("name");
@@ -92,12 +95,35 @@ public class Login extends AppCompatActivity {
                         f.setFormDate(date);
                         f.setFormCategory(cate);
                         f.setFormComment(comm);
-                        formDatabase.daoAccess().insertOnlySingleForm(f);
+                        int id = f.getFormId();
+                        JSONArray array2 = entry.getJSONArray("fieldsets");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                formDatabase.daoAccess().insertOnlySingleForm(f);
+                            }
+                        }) .start();
+                        for (int j = 0; j < array2.length(); j++) {
+                            JSONObject entry2 = array2.getJSONObject(j);
+                            final Questions q = new Questions();
+                            String qtext = entry2.getString("description");
+                            String qtype = entry2.getString("name");
+                            q.setFormId(id);
+                            q.setQuestionText(qtext);
+                            q.setQuestionType(qtype);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    formDatabase.daoAccess().insertOnlySingleQuestion(q);
+                                }
+                            }) .start();
+                        }
                     }
+
+
                 } catch (Exception e) {
 
                 }
-                System.out.println(response);
             }
         }, new Response.ErrorListener() {
 

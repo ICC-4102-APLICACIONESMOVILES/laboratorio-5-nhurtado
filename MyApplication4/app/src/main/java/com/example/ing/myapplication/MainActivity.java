@@ -126,6 +126,13 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                formDatabase.daoAccess().nukeTableQ();
+                formDatabase.daoAccess().nukeTableF();
+            }
+        }) .start();
         Intent intent = new Intent(this, Login.class);
         startActivityForResult(intent,1);
     }
