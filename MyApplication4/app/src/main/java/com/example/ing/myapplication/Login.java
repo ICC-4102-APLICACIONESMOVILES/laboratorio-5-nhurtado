@@ -25,6 +25,7 @@ public class Login extends AppCompatActivity {
     private EditText e;
     private EditText e2;
     private Button b;
+    private long id;
     private NetworkManager networkManager;
     private static final String DATABASE_NAME = "forms_db";
     private FormDatabase formDatabase;
@@ -84,10 +85,9 @@ public class Login extends AppCompatActivity {
                 try {
                     JSONArray array = response.getJSONArray("0");
                     //final List<Forms> Fs = new ArrayList<Forms>();
-                    final List<Questions> Qs = new ArrayList<Questions>();
                     for (int i = 0; i < array.length(); i++) {
-                        Qs.clear();
-                        JSONObject entry = array.getJSONObject(i);
+                        final List<Questions> Qs = new ArrayList<Questions>();
+                        final JSONObject entry = array.getJSONObject(i);
                         final Forms f = new Forms();
                         String name = entry.getString("name");
                         String date = entry.getString("created_at");
@@ -97,24 +97,29 @@ public class Login extends AppCompatActivity {
                         f.setFormDate(date);
                         f.setFormCategory(cate);
                         f.setFormComment(comm);
-                        int id = f.getFormId();
-                        JSONArray array2 = entry.getJSONArray("fieldsets");
-                        for (int j = 0; j < array2.length(); j++) {
-                            JSONObject entry2 = array2.getJSONObject(j);
-                            final Questions q = new Questions();
-                            String qtext = entry2.getString("description");
-                            String qtype = entry2.getString("name");
-                            q.setFormId(id);
-                            q.setQuestionText(qtext);
-                            q.setQuestionType(qtype);
-                            Qs.add(q);
-                        }
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                formDatabase.daoAccess().insertOnlySingleForm(f);
-                                if(Qs!=null) {
-                                    formDatabase.daoAccess().insertMultipleQuestions(Qs);
+                                id = formDatabase.daoAccess().insertOnlySingleForm(f);
+                                System.out.println(id);
+                                try {
+                                    JSONArray array2 = entry.getJSONArray("fieldsets");
+                                    for (int j = 0; j < array2.length(); j++) {
+                                        System.out.println(j);
+                                        JSONObject entry2 = array2.getJSONObject(j);
+                                        Questions q = new Questions();
+                                        String qtext = entry2.getString("description");
+                                        String qtype = entry2.getString("name");
+                                        q.setFormId((int) (long) id);
+                                        q.setQuestionText(qtext);
+                                        q.setQuestionType(qtype);
+                                        Qs.add(q);
+                                    }
+                                    if (Qs != null) {
+                                        formDatabase.daoAccess().insertMultipleQuestions(Qs);
+                                    }
+                                }catch (Exception e){
+
                                 }
                             }
                         }) .start();
@@ -134,4 +139,6 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+
 }

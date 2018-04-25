@@ -16,7 +16,7 @@ import java.util.List;
 public interface DaoAccess {
 
     @Insert
-    void insertOnlySingleForm (Forms forms);
+    long insertOnlySingleForm (Forms forms);
     @Insert
     void insertOnlySingleQuestion (Questions Questions);
     @Insert
@@ -27,6 +27,8 @@ public interface DaoAccess {
     Forms fetchOneFormsbyFormId (int formId);
     @Query("SELECT * FROM Forms")
     List<Forms> fetchAllForms();
+    @Query("SELECT * FROM Questions WHERE formId = :formId")
+    List<Questions> fetchAllQuestionsId(int formId);
     @Query("DELETE FROM Forms")
     void nukeTableF();
     @Query("DELETE FROM Questions")

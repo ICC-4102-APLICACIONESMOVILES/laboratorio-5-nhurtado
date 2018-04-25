@@ -97,9 +97,11 @@ public class Fragment2 extends Fragment {
                 List<Forms> forms = formDatabase.daoAccess().fetchAllForms();
                 List<String> your_array_list = new ArrayList<String>();
                 for (int i=0; i<forms.size(); i++) {
-                    String aux = forms.get(forms.size()-i-1).getFormName()+" "
-                            +forms.get(forms.size()-i-1).getFormDate()+" "
-                            +forms.get(forms.size()-i-1).getFormComment();
+                    Integer id = forms.get(forms.size()-i-1).getFormId();
+                    List<Questions> Qs = formDatabase.daoAccess().fetchAllQuestionsId(id);
+                    String aux = "Nombre: " + forms.get(forms.size()-i-1).getFormName()+"\nFecha:"
+                            +forms.get(forms.size()-i-1).getFormDate()+"\nCantidad Preguntas:"
+                            +Qs.size();
                     your_array_list.add(aux);
                 }
                 arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,your_array_list );
